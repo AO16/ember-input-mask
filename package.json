@@ -1,6 +1,6 @@
 {
   "name": "ember-input-mask",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
@@ -42,7 +42,11 @@
     "ember-addon"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.1.6"
+    "broccoli-concat": "^2.2.0",
+    "broccoli-funnel": "^1.0.1",
+    "broccoli-merge-trees": "^1.1.1",
+    "ember-cli-babel": "^5.1.6",
+    "inputmask-core": "^2.1.1"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
