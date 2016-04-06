@@ -40,13 +40,18 @@ export default Ember.TextField.extend({
       e.preventDefault();
     };
 
-    if (e.keyCode === 90 && e.shiftKey && (e.ctrlKey || e.metaKey)) {
-      this.inputMask.redo();
+    if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
+      if (e.shiftKey) {
+        this.inputMask.redo();
+      } else {
+        this.inputMask.undo();
+      }
+
       setAndPrevent();
-    } else if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
-      this.inputMask.undo();
-      setAndPrevent();
-    } else if (e.keyCode === 8) {
+      return;
+    }
+
+    if (e.keyCode === 8) {
       this.inputMask.backspace();
       setAndPrevent();
     }
