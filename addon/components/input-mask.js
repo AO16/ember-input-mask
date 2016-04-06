@@ -42,9 +42,9 @@ export default Ember.TextField.extend({
 
     if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
       if (e.shiftKey) {
-        this.inputMask.redo();
+        this.get('inputMask').redo();
       } else {
-        this.inputMask.undo();
+        this.get('inputMask').undo();
       }
 
       setAndPrevent();
@@ -52,7 +52,7 @@ export default Ember.TextField.extend({
     }
 
     if (e.keyCode === 8) {
-      this.inputMask.backspace();
+      this.get('inputMask').backspace();
       setAndPrevent();
     }
   },
