@@ -7,7 +7,7 @@ export default Ember.TextField.extend({
   setInputMask: on('init', function() {
     const pattern = this.get('pattern');
 
-    this.inputMask = new InputMask({ pattern });
+    this.set('inputMask', new InputMask({ pattern }));
   }),
 
   focusIn() {
@@ -15,19 +15,19 @@ export default Ember.TextField.extend({
   },
 
   input() {
-    const chars = this.element.value.split('');
+    const [...chars] = this.get('element.value');
 
-    this.inputMask.setValue('');
-    this.inputMask.setSelection({ start: 0, end: 0 });
-    chars.forEach((char) => this.inputMask.input(char));
+    this.get('inputMask').setValue('');
+    this.get('inputMask').setSelection({ start: 0, end: 0 });
+    chars.forEach((char) => this.get('inputMask').input(char));
 
     this._setValue();
   },
 
   keyPress(e) {
-    this.inputMask.selection = { start: this.element.selectionStart, end: this.element.selectionEnd };
+    this.inputMask.selection = { start: this.get('element.selectionStart'), end: this.get('element.selectionEnd') };
 
-    if (this.inputMask.input(String.fromCharCode(e.which))) {
+    if (this.get('inputMask').input(String.fromCharCode(e.which))) {
       this._setValue();
     }
 
@@ -35,29 +35,31 @@ export default Ember.TextField.extend({
   },
 
   keyDown(e) {
+    const setAndPrevent = () => {
+      this._setValue();
+      e.preventDefault();
+    };
+
     if (e.keyCode === 90 && e.shiftKey && (e.ctrlKey || e.metaKey)) {
       this.inputMask.redo();
-      this._setValue();
-      e.preventDefault();
+      setAndPrevent();
     } else if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
       this.inputMask.undo();
-      this._setValue();
-      e.preventDefault();
+      setAndPrevent();
     } else if (e.keyCode === 8) {
       this.inputMask.backspace();
-      this._setValue();
-      e.preventDefault();
+      setAndPrevent();
     }
   },
 
   _setValue() {
-    const maskedValue = this.inputMask.getValue();
+    const maskedValue = this.get('inputMask').getValue();
     this.set('value', maskedValue);
 
     run.schedule('afterRender', this, '_resetCursorPosition');
   },
 
   _resetCursorPosition() {
-    this.element.setSelectionRange(this.inputMask.selection.start, this.inputMask.selection.end);
+    this.get('element').setSelectionRange(this.get('inputMask.selection.start'), this.get('inputMask.selection.end'));
   }
 });
